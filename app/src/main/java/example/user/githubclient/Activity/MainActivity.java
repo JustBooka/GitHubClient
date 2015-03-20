@@ -3,11 +3,11 @@ package example.user.githubclient.Activity;
 import android.app.Activity;
 import android.app.ListActivity;
 import android.os.Bundle;
-
 import java.util.List;
 
 import example.user.githubclient.Models.Repo;
 import example.user.githubclient.R;
+//import example.user.githubclient.RepoAdapter;
 import example.user.githubclient.RepositoriesAPI;
 import retrofit.Callback;
 import retrofit.RestAdapter;
@@ -19,6 +19,7 @@ import retrofit.client.Response;
  */
 public class MainActivity extends ListActivity {
 
+    List<Repo> repoList;
     public static final String ENDPOINT = "https://api.github.com";
 
     @Override
@@ -27,6 +28,13 @@ public class MainActivity extends ListActivity {
         setContentView(R.layout.activity_main);
     }
 
+//    private void updateDisplay() {
+//        RepoAdapter adapter = new RepoAdapter(this, R.layout.item_repo, repoList);
+//        setListAdapter(adapter);
+//    }
+
+
+    // --> add for retrofit
     public void requestData(String uri){
 
         RestAdapter adapter = new RestAdapter.Builder()
@@ -38,7 +46,7 @@ public class MainActivity extends ListActivity {
 
             @Override
             public void success(List<Repo> repos, Response response) {
-//                repoList = arg0;
+                repoList = repos;
 //                updateDisplay();
             }
 
@@ -48,4 +56,5 @@ public class MainActivity extends ListActivity {
             }
         });
     }
+// <--
 }

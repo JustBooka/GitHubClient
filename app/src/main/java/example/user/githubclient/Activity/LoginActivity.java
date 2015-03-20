@@ -10,6 +10,9 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.List;
 
@@ -47,29 +50,30 @@ public class LoginActivity extends Activity {
                 String accessTokenFragment = "access_token=";
                 String accessCodeFragment = "code=";
 
-                if (url.contains(accessTokenFragment)) {
-                    // the GET request contains directly the token
-                    String accessToken = url.substring(url.indexOf(accessTokenFragment));
-//                    TokenStorer.setAccessToken(accessToken);
-                    sPref = getPreferences(MODE_PRIVATE);
-                    SharedPreferences.Editor ed= sPref.edit();
-                    ed.putString(accessToken, url.substring(url.indexOf(accessTokenFragment)) );
-
-                } else if(url.contains(accessCodeFragment)) {
-                    // the GET request contains an authorization code
-                    String accessCode = url.substring(url.indexOf(accessCodeFragment));
+                 if(url.contains(accessCodeFragment) && url.startsWith("http://localhost:4567/callback")) {
+                     // the GET request contains an authorization code
+                     String accessCode = url.substring(url.indexOf(accessCodeFragment));
 //                    TokenStorer.setAccessCode(accessCode);
-                    sPref = getPreferences(MODE_PRIVATE);
-                    SharedPreferences.Editor ed= sPref.edit();
-                    ed.putString(accessCode, url.substring(url.indexOf(accessCodeFragment)) );
+                     sPref = getPreferences(MODE_PRIVATE);
+                     SharedPreferences.Editor ed = sPref.edit();
+                     ed.putString(accessCode, url.substring(url.indexOf(accessCodeFragment)));
 
-                    String query = "client_id=" + CLIENT_ID + "&client_secret=" + CLIENT_SECRET + "&code=" + accessCode;
-                    view.postUrl(TOKEN_URL, query.getBytes());
+                     String query = "?client_id=" + CLIENT_ID + "&client_secret=" + CLIENT_SECRET + "&" + accessCode;
+                         view.loadUrl(TOKEN_URL + query);
 
-                    openMain();
+                 } else if (url.contains(accessTokenFragment) && url.contains(accessCodeFragment)) {
+                        // the GET request contains directly the token
+                        String accessToken = url.substring(url.indexOf(accessTokenFragment));
+//                    TokenStorer.setAccessToken(accessToken);
+                        sPref = getPreferences(MODE_PRIVATE);
+                        SharedPreferences.Editor ed= sPref.edit();
+                        ed.putString(accessToken, url.substring(url.indexOf(accessTokenFragment)) );
+                     openMain();
+                    }
+
                 }
 
-            }
+
 
 
 
