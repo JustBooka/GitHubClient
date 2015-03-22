@@ -1,9 +1,12 @@
 package example.user.githubclient.Activity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.webkit.WebView;
@@ -31,6 +34,7 @@ public class LoginActivity extends Activity {
     private static final String CLIENT_SECRET = "c3e6ed559361f528cb6c4e6e5040d31459236698";
     private static final String REDIRECT_URI = "https://your.callback/uri";
     public static String SECRETID = "?client_id=b89e0192e6b3c9bbd9b8&client_secret=c3e6ed559361f528cb6c4e6e5040d31459236698&";
+    public static String ACCESS_TOKEN;
 
     public static String OAUTH_URL = "https://github.com/login/oauth/authorize";
     public static String TOKEN_URL = "https://github.com/login/oauth/access_token";
@@ -47,64 +51,71 @@ public class LoginActivity extends Activity {
         setContentView(R.layout.activity_login);
 
         String url = OAUTH_URL + "?client_id=" + CLIENT_ID + "&scope=repo,user,gist";
+        if (isOnline()) {
+            webview = (WebView) findViewById(R.id.wv_login);
+            webview.getSettings().setJavaScriptEnabled(true);
+            webview.setWebViewClient(new WebViewClient() {
 
-        webview = (WebView) findViewById(R.id.wv_login);
-        webview.getSettings().setJavaScriptEnabled(true);
-        webview.setWebViewClient(new WebViewClient() {
-            public void onPageStarted(WebView view, String url, Bitmap favicon) {
-                String accessTokenFragment = "access_token=";
-                String accessCodeFragment = "code=";
+                public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                    String accessTokenFragment = "access_token=";
+                    String accessCodeFragment = "code=";
 
-                if (url.contains(accessCodeFragment) && url.startsWith("http://localhost:4567/callback")) {
-                    // the GET request contains an authorization code
+                    if (url.contains(accessCodeFragment) && url.startsWith("http://localhost:4567/callback")) {
+                        // the GET request contains an authorization code
                         int codeStart = url.indexOf(accessCodeFragment) + accessCodeFragment.length();
                         int codeEnd = url.indexOf('&', codeStart) == -1 ? url.length() : url.indexOf('&', codeStart);
-                        String  accessCode = url.substring(codeStart, codeEnd);
-//                    String accessCode = url.substring(url.indexOf(accessCodeFragment));
-//                    TokenStorer.setAccessCode(accessCode);
-                    sPref = getPreferences(MODE_PRIVATE);
-                    SharedPreferences.Editor ed = sPref.edit();
-                    ed.putString(accessCode, url.substring(url.indexOf(accessCodeFragment)));
+                        String accessCode = url.substring(codeStart, codeEnd);
 
-//           URL for access token
-                    String accessURL = TO_URL + accessCode;
+//                  URL for access token
+                        String accessURL = TO_URL + accessCode;
 
-                    RestAdapter restAdapter = new RestAdapter.Builder()
-                            .setEndpoint(TOKEN_URL2)
-                            .build();
+                        RestAdapter restAdapter = new RestAdapter.Builder()
+                                .setEndpoint(TOKEN_URL2)
+                                .build();
 
-                    AccessAPI api = restAdapter.create(AccessAPI.class);
-                    api.GetAccess(CLIENT_ID, CLIENT_SECRET, accessCode,
-                            new Callback<Access>() {
-                                @Override
-                                public void success(Access accesses, Response response) {
+                        AccessAPI api = restAdapter.create(AccessAPI.class);
+                        api.GetAccess(CLIENT_ID, CLIENT_SECRET, accessCode,
+                                new Callback<Access>() {
+                                    @Override
+                                    public void success(Access accesses, Response response) {
 
-                                    Toast.makeText(getBaseContext(), "access token geted " + accesses.access_token, Toast.LENGTH_LONG).show();
-                                }
+                                        Toast.makeText(getBaseContext(), "access token is: " + accesses.access_token, Toast.LENGTH_LONG).show();
 
-                                @Override
-                                public void failure(RetrofitError error) {
-                                    Log.d("retrofit", error.toString());
-                                }
-                            });
+                                        sPref = getApplicationContext().getSharedPreferences("My_PREFERENCE",
+                                                MODE_PRIVATE);
+                                        SharedPreferences.Editor ed = sPref.edit();
+                                        ed.putString(ACCESS_TOKEN, String.valueOf(accesses.access_token));
+                                        ed.apply();
+                                        openMain();
+                                    }
+
+                                    @Override
+                                    public void failure(RetrofitError error) {
+                                        Log.d("retrofit", error.toString());
+                                    }
+                                });
 
 
-                } else if (url.contains(accessTokenFragment) && url.contains(accessCodeFragment)) {
-                    // the GET request contains directly the token
-                    String accessToken = url.substring(url.indexOf(accessTokenFragment));
+                    } else if (url.contains(accessTokenFragment) && url.contains(accessCodeFragment)) {
+                        // the GET request contains directly the token
+                        String accessToken = url.substring(url.indexOf(accessTokenFragment));
 //                    TokenStorer.setAccessToken(accessToken);
-                    sPref = getPreferences(MODE_PRIVATE);
-                    SharedPreferences.Editor ed = sPref.edit();
-                    ed.putString(accessToken, url.substring(url.indexOf(accessTokenFragment)));
+                        sPref = getApplicationContext().getSharedPreferences("My_PREFERENCE",
+                                MODE_PRIVATE);
+                        SharedPreferences.Editor ed = sPref.edit();
+                        ed.putString(accessToken, url.substring(url.indexOf(accessTokenFragment)));
+                        ed.commit();
+                    }
 
-//                    openMain();
                 }
 
-            }
 
+            });
+            webview.loadUrl(url);
+        } else {
+            Toast.makeText(this, "Network isn`t available", Toast.LENGTH_LONG).show();
+        }
 
-        });
-        webview.loadUrl(url);
     }
 
     private void openMain() {
@@ -114,42 +125,17 @@ public class LoginActivity extends Activity {
 
     }
 
+    protected boolean isOnline() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+        if (networkInfo != null && networkInfo.isConnectedOrConnecting()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 }
-
-
-//        webview.clearCache(true);
-//        webview.clearFormData();
-//        webview.clearHistory();
-//        webview.clearMatches();
-//        webview.clearSslPreferences();
-//
-//        webview.getSettings().setUseWideViewPort(true);
-//
-//        Login();
-//    }
-//
-//    private void Login() {
-//        webview.loadUrl(OA_URL);
-//    }
-//
-//
-//    private class MyWebViewClient extends WebViewClient {
-//        public void onPageStarted(WebView view, String url, Bitmap favicon) {
-//            String accessTokenFragment = "access_token=";
-//            String accessCodeFragment = "code=";
-//            if (url != null) {
-//                if (url.contains(accessCodeFragment)) {
-//                    int codeStart = url.indexOf("code=") + "code=".length();
-//                    int codeEnd = url.indexOf('&', codeStart) == -1 ? url.length() : url.indexOf('&', codeStart);
-//                    Uri uri = Uri.parse(url.substring(codeStart, codeEnd));
-//                    webview.loadUrl(TO_URL + uri);
-//
-//                }
-//            }
-//
-//        }
-//    }
-//}
 
 
 
