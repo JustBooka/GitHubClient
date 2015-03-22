@@ -1,7 +1,5 @@
 package example.user.githubclient.api;
 
-import java.util.List;
-
 import example.user.githubclient.Models.Access;
 import retrofit.Callback;
 import retrofit.http.GET;
@@ -15,7 +13,8 @@ public interface AccessAPI {
     @Headers({
             "Accept: application/json"
     })
-    @GET("/access_token{secretAndId}{code}")
-    public void GetAccess(@Query("secrertAndId") String secretId, @Query("code") String code,
-                          Callback<List<Access>> response);
+    @GET("/access_token")
+    public void GetAccess(@Query("client_id") String clientId, @Query("client_secret") String clientSecret,
+                          @Query("code") String code,
+                          Callback<Access> response);
 }

@@ -30,13 +30,14 @@ public class LoginActivity extends Activity {
     private static final String CLIENT_ID = "b89e0192e6b3c9bbd9b8";
     private static final String CLIENT_SECRET = "c3e6ed559361f528cb6c4e6e5040d31459236698";
     private static final String REDIRECT_URI = "https://your.callback/uri";
+    public static String SECRETID = "?client_id=b89e0192e6b3c9bbd9b8&client_secret=c3e6ed559361f528cb6c4e6e5040d31459236698&";
 
     public static String OAUTH_URL = "https://github.com/login/oauth/authorize";
     public static String TOKEN_URL = "https://github.com/login/oauth/access_token";
-    public static String TOKEN_URL2 ="https://github.com/login/oauth";
+    public static String TOKEN_URL2 = "https://github.com/login/oauth";
     public static String OA_URL = OAUTH_URL + "client_id=" + CLIENT_ID + "&scope=repo,user,gist";
     public static String TO_URL = TOKEN_URL + "?client_id=" + CLIENT_ID + "&client_secret=" + CLIENT_SECRET + "&";
-public static  String SECRETID = "?client_id=b89e0192e6b3c9bbd9b8&client_secret=c3e6ed559361f528cb6c4e6e5040d31459236698&";
+
     SharedPreferences sPref;
     private WebView webview;
 
@@ -62,7 +63,6 @@ public static  String SECRETID = "?client_id=b89e0192e6b3c9bbd9b8&client_secret=
                     SharedPreferences.Editor ed = sPref.edit();
                     ed.putString(accessCode, url.substring(url.indexOf(accessCodeFragment)));
 
-//
 //           URL for access token
 //                    String accessURL = TO_URL + accessCode;
 
@@ -71,30 +71,29 @@ public static  String SECRETID = "?client_id=b89e0192e6b3c9bbd9b8&client_secret=
                             .build();
 
                     AccessAPI api = restAdapter.create(AccessAPI.class);
-                    api.GetAccess(SECRETID, accessCode,
-                            new Callback<List<Access>>() {
-                        @Override
-                        public void success(List<Access> accesses, Response response) {
+                    api.GetAccess(CLIENT_ID, CLIENT_SECRET, accessCode,
+                            new Callback<Access>() {
+                                @Override
+                                public void success(Access accesses, Response response) {
 
-                            Toast.makeText(getBaseContext(), "access token geted " + accesses.get(0).access_token, Toast.LENGTH_LONG).show();
-                        }
+                                    Toast.makeText(getBaseContext(), "access token geted " + accesses.access_token, Toast.LENGTH_LONG).show();
+                                }
 
-                        @Override
-                        public void failure(RetrofitError error) {
-                            Log.d("retrofit",error.toString());
-                        }
-                    });
+                                @Override
+                                public void failure(RetrofitError error) {
+                                    Log.d("retrofit", error.toString());
+                                }
+                            });
 
 
-                }
-                else if (url.contains(accessTokenFragment) && url.contains(accessCodeFragment)) {
+                } else if (url.contains(accessTokenFragment) && url.contains(accessCodeFragment)) {
                     // the GET request contains directly the token
                     String accessToken = url.substring(url.indexOf(accessTokenFragment));
 //                    TokenStorer.setAccessToken(accessToken);
                     sPref = getPreferences(MODE_PRIVATE);
                     SharedPreferences.Editor ed = sPref.edit();
                     ed.putString(accessToken, url.substring(url.indexOf(accessTokenFragment)));
-//
+
 //                    openMain();
                 }
 
