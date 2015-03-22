@@ -57,14 +57,17 @@ public class LoginActivity extends Activity {
 
                 if (url.contains(accessCodeFragment) && url.startsWith("http://localhost:4567/callback")) {
                     // the GET request contains an authorization code
-                    String accessCode = url.substring(url.indexOf(accessCodeFragment));
+                        int codeStart = url.indexOf(accessCodeFragment) + accessCodeFragment.length();
+                        int codeEnd = url.indexOf('&', codeStart) == -1 ? url.length() : url.indexOf('&', codeStart);
+                        String  accessCode = url.substring(codeStart, codeEnd);
+//                    String accessCode = url.substring(url.indexOf(accessCodeFragment));
 //                    TokenStorer.setAccessCode(accessCode);
                     sPref = getPreferences(MODE_PRIVATE);
                     SharedPreferences.Editor ed = sPref.edit();
                     ed.putString(accessCode, url.substring(url.indexOf(accessCodeFragment)));
 
 //           URL for access token
-//                    String accessURL = TO_URL + accessCode;
+                    String accessURL = TO_URL + accessCode;
 
                     RestAdapter restAdapter = new RestAdapter.Builder()
                             .setEndpoint(TOKEN_URL2)
