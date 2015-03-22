@@ -2,12 +2,18 @@ package example.user.githubclient;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.List;
 
 import example.user.githubclient.Models.Repositories;
@@ -30,6 +36,16 @@ private Context context;
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.item_repo, parent, false);
 
+        Repositories image = repositoriesList.get(position);
+        ImageView iv_owner = (ImageView) view.findViewById(R.id.iv_owner);
+        try {
+            InputStream in = (InputStream) new URL(image.getOwner().getAvatarUrl()).getContent();
+            Bitmap bitmap = BitmapFactory.decodeStream(in);
+            iv_owner.setImageBitmap(bitmap);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         Repositories owner = repositoriesList.get(position);
         TextView tv_owner = (TextView) view.findViewById(R.id.tv_owner);
         tv_owner.setText(String.valueOf(owner.getOwner().getLogin()));
@@ -44,11 +60,11 @@ private Context context;
 
         Repositories watchers = repositoriesList.get(position);
         TextView tv_watchers = (TextView) view.findViewById(R.id.tv_watchers);
-        tv_watchers.setText(Integer.valueOf(watchers.getWatchersCount()));
+        tv_watchers.setText(String.valueOf(watchers.getWatchersCount()));
 
         Repositories forks = repositoriesList.get(position);
         TextView tv_forks = (TextView) view.findViewById(R.id.tv_forks);
-        tv_forks.setText(Integer.valueOf(forks.getForksCount()));
+        tv_forks.setText(String.valueOf(forks.getForksCount()));
 
         return view;
     }

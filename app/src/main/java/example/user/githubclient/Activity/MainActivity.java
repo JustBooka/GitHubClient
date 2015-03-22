@@ -1,8 +1,11 @@
 package example.user.githubclient.Activity;
 
 import android.app.ListActivity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 
 import java.util.List;
 
@@ -25,6 +28,7 @@ public class MainActivity extends ListActivity {
     List<Repositories> repositoriesList;
     public static final String ENDPOINT = "https://api.github.com";
     public String accessToken;
+    Object object;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +45,26 @@ public class MainActivity extends ListActivity {
     private void updateDisplay() {
         RepoAdapter adapter = new RepoAdapter(this, R.layout.item_repo, repositoriesList);
         setListAdapter(adapter);
+
+        getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                object = getSelectedItemPosition();
+                ItemClick();
+            }
+        });
     }
+
+    private void ItemClick() {
+        Repositories repo = (Repositories) object;
+        String repoName = repo.getName();
+        String ownerName = repo.getOwner().getLogin();
+        Intent intent = new Intent(this, CommitsActivity.class);
+        intent.putExtra("repoName", String.valueOf(repoName));
+        intent.putExtra("ownerName", String.valueOf(ownerName));
+        startActivity(intent);
+    }
+
 
 
     // --> add for retrofit

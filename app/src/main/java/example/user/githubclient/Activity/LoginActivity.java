@@ -120,7 +120,6 @@ public class LoginActivity extends Activity {
 
     private void openMain() {
         Intent intent = new Intent(this, MainActivity.class);
-        intent.putExtra("value", String.valueOf(sPref));
         startActivity(intent);
 
     }

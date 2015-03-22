@@ -63,13 +63,13 @@ public class Repositories {
     private Object homepage;
     private Integer size;
     private Integer stargazersCount;
-    private Integer watchersCount;
+    private int watchersCount;
     private String language;
     private Boolean hasIssues;
     private Boolean hasDownloads;
     private Boolean hasWiki;
     private Boolean hasPages;
-    private Integer forksCount;
+    private int forksCount;
     private Object mirrorUrl;
     private Integer openIssuesCount;
     private Integer forks;

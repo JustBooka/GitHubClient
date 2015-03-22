@@ -9,17 +9,24 @@
         android:layout_height="match_parent"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:orientation="vertical"
+        android:orientation="horizontal"
         android:paddingTop="10dp">
+
+        <ImageView
+            android:id="@+id/iv_owner"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/tv_owner"
-            android:paddingBottom="5dp"
-            android:paddingLeft="10dp" />
-
-    </LinearLayout>
+            android:layout_toRightOf="@+id/iv_owner"
+            android:paddingBottom="5dp" />
 
     <LinearLayout
         android:id="@+id/ll_details"
@@ -67,6 +74,7 @@
                 android:id="@+id/tv_forks"
                 android:paddingLeft="3dp" />
         </LinearLayout>
+    </LinearLayout>
     </LinearLayout>
 
 
