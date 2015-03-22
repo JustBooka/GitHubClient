@@ -32,23 +32,23 @@ private Context context;
 
         Repositories owner = repositoriesList.get(position);
         TextView tv_owner = (TextView) view.findViewById(R.id.tv_owner);
-        tv_owner.setText(owner.getOwner().getLogin());
+        tv_owner.setText(String.valueOf(owner.getOwner().getLogin()));
 
         Repositories name = repositoriesList.get(position);
         TextView tv_repo_name = (TextView) view.findViewById(R.id.tv_repo_name);
-        tv_repo_name.setText(name.getName());
+        tv_repo_name.setText(String.valueOf(name.getName()));
 
         Repositories descriprion = repositoriesList.get(position);
         TextView tv_repo_description = (TextView) view.findViewById(R.id.tv_repo_description);
-        tv_repo_description.setText(descriprion.getDescription());
+        tv_repo_description.setText(String.valueOf(descriprion.getDescription()));
 
         Repositories watchers = repositoriesList.get(position);
         TextView tv_watchers = (TextView) view.findViewById(R.id.tv_watchers);
-        tv_watchers.setText(watchers.getWatchersCount());
+        tv_watchers.setText(Integer.valueOf(watchers.getWatchersCount()));
 
         Repositories forks = repositoriesList.get(position);
         TextView tv_forks = (TextView) view.findViewById(R.id.tv_forks);
-        tv_forks.setText(forks.getForksCount());
+        tv_forks.setText(Integer.valueOf(forks.getForksCount()));
 
         return view;
     }
