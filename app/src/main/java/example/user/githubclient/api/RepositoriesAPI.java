@@ -2,7 +2,7 @@ package example.user.githubclient.api;
 
 import java.util.List;
 
-import example.user.githubclient.models.Repo;
+import example.user.githubclient.Models.Repo;
 import retrofit.Callback;
 import retrofit.http.GET;
 

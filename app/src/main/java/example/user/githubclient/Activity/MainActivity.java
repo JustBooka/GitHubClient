@@ -1,6 +1,5 @@
 package example.user.githubclient.Activity;
 
-import android.app.Activity;
 import android.app.ListActivity;
 import android.os.Bundle;
 import java.util.List;
@@ -8,7 +7,7 @@ import java.util.List;
 import example.user.githubclient.Models.Repo;
 import example.user.githubclient.R;
 //import example.user.githubclient.RepoAdapter;
-import example.user.githubclient.RepositoriesAPI;
+import example.user.githubclient.api.RepositoriesAPI;
 import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
@@ -28,6 +27,7 @@ public class MainActivity extends ListActivity {
         setContentView(R.layout.activity_main);
     }
 
+//
 //    private void updateDisplay() {
 //        RepoAdapter adapter = new RepoAdapter(this, R.layout.item_repo, repoList);
 //        setListAdapter(adapter);

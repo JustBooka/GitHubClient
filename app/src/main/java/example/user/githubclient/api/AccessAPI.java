@@ -2,11 +2,10 @@ package example.user.githubclient.api;
 
 import java.util.List;
 
-import example.user.githubclient.models.Access;
+import example.user.githubclient.Models.Access;
 import retrofit.Callback;
 import retrofit.http.GET;
 import retrofit.http.Headers;
-import retrofit.http.Path;
 import retrofit.http.Query;
 
 /**
