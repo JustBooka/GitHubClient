@@ -14,5 +14,5 @@ public interface RepositoriesAPI {
 
     @GET("/user/repos")
     public void getRepos(@Query("access_token") String accessToken,
-            Callback<List<Repositories>> response);
+                         Callback<List<Repositories>> response);
 }

@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/ListItem"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
     <LinearLayout
-        android:id="@+id/ll_header"
+        android:id="@+id/ri_header"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:orientation="horizontal"
@@ -19,62 +20,83 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:layout_marginBottom="10dp"
-            android:layout_marginTop="10dp"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/tv_owner"
-            android:layout_toRightOf="@+id/iv_owner"
-            android:paddingBottom="5dp" />
-
-    <LinearLayout
-        android:id="@+id/ll_details"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:paddingBottom="5dp"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:layout_below="@id/ll_header"
-        android:paddingTop="10dp">
-
-        <TextView
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:id="@+id/tv_repo_name"
-            android:paddingBottom="0dp"
-            android:singleLine="true"
-            android:textStyle="normal" />
-
-        <TextView
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:id="@+id/tv_repo_description"
-            android:singleLine="true" />
+            android:layout_marginTop="10dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:paddingTop="6dp">
+            android:orientation="vertical">
 
             <TextView
-                android:layout_height="wrap_content"
+
+                android:id="@+id/tv_owner"
+                style="@style/Base.TextAppearance.AppCompat.Widget.ActionMode.Subtitle"
                 android:layout_width="wrap_content"
-                android:id="@+id/tv_watchers"
-                android:paddingLeft="3dp"
-                android:paddingRight="15dp" />
+                android:layout_height="wrap_content"
+                android:paddingBottom="5dp" />
+
+            <LinearLayout
+                android:id="@+id/ll_details"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tv_owner"
+                android:orientation="vertical"
+                android:paddingBottom="5dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingTop="10dp">
+
+                <TextView
+                    android:id="@+id/tv_repo_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="0dp"
+                    android:singleLine="true"
+                    android:textStyle="normal" />
+
+                <TextView
+                    android:id="@+id/tv_repo_description"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="3"
+                    android:orientation="horizontal"
+                    android:paddingBottom="5dp"
+                    android:singleLine="true" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingTop="6dp">
+
+                    <TextView
+                        android:id="@+id/tv_watchers_icon"
+                        style="@style/Icon"
+                        android:text="watchers" />
+
+                    <TextView
+                        android:id="@+id/tv_watchers"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="3dp"
+                        android:paddingRight="15dp" />
+
+                    <TextView
+                        android:id="@+id/tv_forks_icon"
+                        style="@style/Icon"
+                        android:text="forks" />
 
 
-            <TextView
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:id="@+id/tv_forks"
-                android:paddingLeft="3dp" />
+                    <TextView
+                        android:id="@+id/tv_forks"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="3dp" />
+                </LinearLayout>
+            </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
     </LinearLayout>
 
 

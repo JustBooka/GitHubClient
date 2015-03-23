@@ -1,11 +1,15 @@
 package example.user.githubclient.Activity;
 
 import android.app.ListActivity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -18,7 +22,6 @@ import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-//import example.user.githubclient.RepoAdapter;
 
 /**
  * Created by alexey.bukin on 18.03.2015.
@@ -37,19 +40,22 @@ public class MainActivity extends ListActivity {
         SharedPreferences sPref = getApplicationContext().getSharedPreferences("My_PREFERENCE",
                 MODE_PRIVATE);
         accessToken = sPref.getString(LoginActivity.ACCESS_TOKEN, "");
-
-        requestData();
+        if (isOnline()) {
+            requestData();
+        } else {
+            Toast.makeText(this, "Network isn`t available", Toast.LENGTH_LONG).show();
+        }
     }
 
-    //
     private void updateDisplay() {
-        RepoAdapter adapter = new RepoAdapter(this, R.layout.item_repo, repositoriesList);
+        final RepoAdapter adapter = new RepoAdapter(this, R.layout.item_repo, repositoriesList);
         setListAdapter(adapter);
 
+        getListView().setAdapter(adapter);
         getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                object = getSelectedItemPosition();
+                object = adapter.getItem(position);
                 ItemClick();
             }
         });
@@ -57,8 +63,8 @@ public class MainActivity extends ListActivity {
 
     private void ItemClick() {
         Repositories repo = (Repositories) object;
-        String repoName = repo.getName();
-        String ownerName = repo.getOwner().getLogin();
+        String repoName = String.valueOf(repo.getName());
+        String ownerName = String.valueOf(repo.getOwner().getLogin());
         Intent intent = new Intent(this, CommitsActivity.class);
         intent.putExtra("repoName", String.valueOf(repoName));
         intent.putExtra("ownerName", String.valueOf(ownerName));
@@ -66,8 +72,6 @@ public class MainActivity extends ListActivity {
     }
 
 
-
-    // --> add for retrofit
     public void requestData() {
 
         RestAdapter adapter = new RestAdapter.Builder()
@@ -87,6 +91,15 @@ public class MainActivity extends ListActivity {
 
             }
         });
-// <--
+    }
+
+    protected boolean isOnline() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+        if (networkInfo != null && networkInfo.isConnectedOrConnecting()) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

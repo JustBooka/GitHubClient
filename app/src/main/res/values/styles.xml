@@ -5,6 +5,15 @@
         <!-- Customize your theme here. -->
     </style>
 
+
+    <style name="Icon">
+        <item name="android:textSize">14dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:textColor">#A8A8A8</item>
+    </style>
+
     <style name="ListItem">
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">wrap_content</item>
