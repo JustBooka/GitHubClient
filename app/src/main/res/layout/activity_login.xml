@@ -4,9 +4,9 @@
     android:orientation="vertical">
 
     <WebView
+        android:id="@+id/wv_login"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/wv_login" />
+        android:layout_height="match_parent" />
 
     <ProgressBar
         android:id="@+id/pb"

@@ -10,7 +10,7 @@ public class Owner {
 
     private String login;
     private Integer id;
-    private String avatarUrl;
+    private String avatar_url;
     private String gravatarId;
     private String url;
     private String htmlUrl;
@@ -56,17 +56,17 @@ public class Owner {
     }
 
     /**
-     * @return The avatarUrl
+     * @return The avatar_url
      */
-    public String getAvatarUrl() {
-        return avatarUrl;
+    public String getAvatar_url() {
+        return avatar_url;
     }
 
     /**
-     * @param avatarUrl The avatar_url
+     * @param avatar_url The avatar_url
      */
-    public void setAvatarUrl(String avatarUrl) {
-        this.avatarUrl = avatarUrl;
+    public void setAvatar_url(String avatar_url) {
+        this.avatar_url = avatar_url;
     }
 
     /**

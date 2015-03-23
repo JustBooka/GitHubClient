@@ -1,14 +1,17 @@
 package example.user.githubclient.Activity;
 
-import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.List;
@@ -26,12 +29,14 @@ import retrofit.client.Response;
 /**
  * Created by alexey.bukin on 18.03.2015.
  */
-public class MainActivity extends ListActivity {
+public class MainActivity extends ActionBarActivity {
 
     List<Repositories> repositoriesList;
     public static final String ENDPOINT = "https://api.github.com";
     public String accessToken;
     Object object;
+
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,11 +45,29 @@ public class MainActivity extends ListActivity {
         SharedPreferences sPref = getApplicationContext().getSharedPreferences("My_PREFERENCE",
                 MODE_PRIVATE);
         accessToken = sPref.getString(LoginActivity.ACCESS_TOKEN, "");
+
+        toolbar = (Toolbar) findViewById(R.id.app_bar);
+        setSupportActionBar(toolbar);
+
         if (isOnline()) {
             requestData();
         } else {
             Toast.makeText(this, "Network isn`t available", Toast.LENGTH_LONG).show();
         }
+
+    }
+
+    private ListView mListView;
+
+    protected ListView getListView() {
+        if (mListView == null) {
+            mListView = (ListView) findViewById(android.R.id.list);
+        }
+        return mListView;
+    }
+
+    protected void setListAdapter(ListAdapter adapter) {
+        getListView().setAdapter(adapter);
     }
 
     private void updateDisplay() {

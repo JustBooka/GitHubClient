@@ -36,15 +36,8 @@ public class RepoAdapter extends ArrayAdapter<Repositories> {
 
         Repositories image = repositoriesList.get(position);
         ImageView iv_owner = (ImageView) view.findViewById(R.id.iv_owner);
-        Picasso.with(context).load(image.getOwner().getAvatarUrl())
+        Picasso.with(context).load(image.getOwner().getAvatar_url())
                 .resize(80, 80).centerCrop().into(iv_owner);
-//        try {
-//            InputStream in = (InputStream) new URL(image.getOwner().getAvatarUrl()).getContent();
-//            Bitmap bitmap = BitmapFactory.decodeStream(in);
-//            iv_owner.setImageBitmap(bitmap);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
 
         Repositories owner = repositoriesList.get(position);
         TextView tv_owner = (TextView) view.findViewById(R.id.tv_owner);

@@ -58,14 +58,17 @@ public class LoginActivity extends Activity {
             webview = (WebView) findViewById(R.id.wv_login);
             webview.getSettings().setJavaScriptEnabled(true);
             webview.loadUrl(url);
+            webview.clearHistory();
+            webview.clearCache(true);
             webview.setWebViewClient(new WebViewClient() {
 
                 public void onPageStarted(WebView view, String url, Bitmap favicon) {
-                    pb.setVisibility(View.VISIBLE);
                     String accessTokenFragment = "access_token=";
                     String accessCodeFragment = "code=";
 
                     if (url.contains(accessCodeFragment) && url.startsWith("http://localhost:4567/callback")) {
+                        webview.setVisibility(View.INVISIBLE);
+                        pb.setVisibility(View.VISIBLE);
                         // the GET request contains an authorization code
                         int codeStart = url.indexOf(accessCodeFragment) + accessCodeFragment.length();
                         int codeEnd = url.indexOf('&', codeStart) == -1 ? url.length() : url.indexOf('&', codeStart);
